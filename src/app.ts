@@ -1,8 +1,10 @@
-import httpStatus from 'http-status';
 import express from 'express';
+import session from 'express-session';
+import httpStatus from 'http-status';
+import passport from 'passport';
+import { connectDB, env } from './config';
 import { logger } from './middlewares';
-import { connectDB } from './config';
-import { env } from 'process';
+import router from './routes';
 
 // Create an Express application
 const app = express();
@@ -11,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 // API call logger middleware
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   logger.info(`${req.method} ${req.originalUrl} - ${req.ip}`);
   next();
 });
@@ -19,9 +21,22 @@ app.use((req, res, next) => {
 // mongodb database connection
 connectDB();
 
+// Use express-session middleware to handle user sessions (required for Passport.js authentication)
+app.use(session({ secret: env.sessionSecret, resave: false, saveUninitialized: false }));
+
+// Initialize Passport.js middleware for authentication strategies
+app.use(passport.initialize());
+
+// Enable persistent login sessions with Passport.js (requires express-session)
+app.use(passport.session());
+
 // Health check route
 app.get('/health', (_req, res) => {
   return res.status(httpStatus.OK).send({ status: httpStatus.OK, message: 'Server is healthy' });
 });
 
-app.listen(env.port, () => {});
+app.use('/api', router);
+
+app.listen(env.port, () => {
+  console.log(`Server is running on port ${env.port}`);
+});

@@ -11,6 +11,10 @@ export default class CommonService<T extends Document> {
     return await this.model.create(data);
   }
 
+  async findOne(filter: Partial<Record<keyof T, any>>) {
+    return await this.model.findOne(filter);
+  }
+
   async findAll(filter: Partial<Record<keyof T, any>> = {}) {
     return await this.model.find(filter);
   }

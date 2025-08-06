@@ -31,18 +31,30 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, required: true },
 
     /**
-     * Login method for the user (manual or google, required)
+     * Authentication provider for the user (e.g., 'facebook', 'google'). Required.
      */
-    loginThrough: {
+    provider: {
       type: String,
-      enum: ['manual', 'google'],
-      required: true,
+    },
+
+    providerId: {
+      type: String,
     },
 
     /**
      * Last login date and time for the user
      */
     lastLoginAt: { type: Date },
+
+    /**
+     * User's profile picture URL
+     */
+    imageUrl: { type: String },
+
+    /**
+     * Indicates whether the user's email is verified
+     */
+    isEmailVerified: { type: Boolean, default: false },
   },
   {
     /**

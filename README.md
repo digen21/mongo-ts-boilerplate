@@ -77,6 +77,7 @@ docker-compose up --build
 ## Logging
 
 Logs are stored in the `logs/` directory:
+
 - `error.logs`
 - `warning.logs`
 - `success.logs`

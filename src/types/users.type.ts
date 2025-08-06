@@ -1,13 +1,14 @@
 import { Document } from 'mongoose';
 
-export type LoginType = 'manual' | 'google';
-
 export interface IUser extends Document {
   firstName?: string;
   lastName?: string;
   username: string;
   email: string;
   password: string;
-  loginThrough: LoginType;
+  provider?: string;
+  providerId?: string;
   lastLoginAt?: Date;
+  imageUrl?: string;
+  isEmailVerified?: boolean;
 }
