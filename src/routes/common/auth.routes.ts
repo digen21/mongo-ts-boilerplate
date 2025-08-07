@@ -1,7 +1,6 @@
 import express from 'express';
+import { googleAuthFailure, googleAuthSuccess } from "../../controllers";
 import passport from 'passport';
-
-import { googleAuthFailure, googleAuthSuccess } from '@src/controllers';
 
 const router = express.Router();
 
@@ -9,10 +8,10 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 
 router.get(
   '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/auth/google/failure', session: false }),
+  passport.authenticate('google', { session: false }),
   googleAuthSuccess,
 );
 
-router.get('/google/failure', googleAuthFailure);
+router.get('/google/failure', googleAuthFailure);   
 
 export default router;

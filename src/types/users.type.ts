@@ -5,7 +5,7 @@ export interface IUser extends Document {
   lastName?: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
   provider?: string;
   providerId?: string;
   lastLoginAt?: Date;

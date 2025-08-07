@@ -26,9 +26,9 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
 
     /**
-     * Hashed password for the user (required)
+     * Hashed password for the user (optional)
      */
-    password: { type: String, required: true },
+    password: { type: String },
 
     /**
      * Authentication provider for the user (e.g., 'facebook', 'google'). Required.
@@ -65,12 +65,12 @@ const UserSchema = new Schema<IUser>(
 );
 
 // Pre-save middleware to hash password
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+  UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password') || !this.password) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  });
 
 // Method to compare password
 UserSchema.methods.comparePassword = async function (password: string): Promise<boolean> {

@@ -2,6 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import httpStatus from 'http-status';
 import passport from 'passport';
+
 import { connectDB, env } from './config';
 import { logger } from './middlewares';
 import router from './routes';
@@ -35,7 +36,19 @@ app.get('/health', (_req, res) => {
   return res.status(httpStatus.OK).send({ status: httpStatus.OK, message: 'Server is healthy' });
 });
 
+// API gateway route
 app.use('/api', router);
+
+// Global error handler middleware
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  logger.error(err.stack || err.message || err);
+  const status = err.statusCode || err.status || httpStatus.INTERNAL_SERVER_ERROR;
+  res.status(status).json({
+    status,
+    message: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  });
+});
 
 app.listen(env.port, () => {
   console.log(`Server is running on port ${env.port}`);

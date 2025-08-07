@@ -7,6 +7,7 @@ const envSchema = Joi.object({
   MONGODB_URI: Joi.string().uri().required(),
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  GOOGLE_CALLBACK_URL: Joi.string().required(),
   SESSION_SECRET: Joi.string().required(),
 }).unknown();
 
@@ -23,6 +24,9 @@ const env = {
   googleClientId: envVars.GOOGLE_CLIENT_ID,
   googleClientSecret: envVars.GOOGLE_CLIENT_SECRET,
   sessionSecret: envVars.SESSION_SECRET,
+  callbackUrl: envVars.GOOGLE_CALLBACK_URL,
+  isProduction: envVars.NODE_ENV === 'production',
+  isDevelopment: envVars.NODE_ENV === 'development',
 };
 
 export default env;

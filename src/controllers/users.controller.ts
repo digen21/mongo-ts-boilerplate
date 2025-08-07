@@ -1,9 +1,10 @@
-import { User } from '@src/models';
-import { CommonService } from '@src/services';
-import { IUser } from '@src/types';
-import { ServerError } from '@src/utils';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+
+import { User } from '../models';
+import { CommonService } from '../services';
+import { IUser } from '../types';
+import { ServerError } from '../utils';
 
 const userService = new CommonService<IUser>(User);
 

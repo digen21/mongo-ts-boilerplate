@@ -1,17 +1,17 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
-import { env } from '@src/config';
-import { User } from '@src/models';
-import { CommonService, findOrCreateGoogleUser } from '@src/services';
-import { IUser } from '@src/types';
+import { env } from '../../config';
+import { User } from '../../models';
+import { CommonService, findOrCreateGoogleUser } from '../../services';
+import { IUser } from '../../types';
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: env.googleClientId!,
       clientSecret: env.googleClientSecret!,
-      callbackURL: '/auth/google/callback',
+      callbackURL: env.callbackUrl
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
@@ -33,3 +33,5 @@ passport.deserializeUser(async (id: string, done) => {
   const user = commonService.findById(id);
   done(null, user);
 });
+
+export default passport;
