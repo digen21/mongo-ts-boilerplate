@@ -4,7 +4,11 @@ import httpStatus from 'http-status';
 import passport from 'passport';
 
 import { connectDB, env } from './config';
-import { logger } from './middlewares';
+import {
+  installPassport,
+  installResponseCompression,
+  logger,
+} from './middlewares';
 import router from './routes';
 
 // Create an Express application
@@ -12,6 +16,15 @@ const app = express();
 
 // Middleware to parse JSON requests
 app.use(express.json());
+
+// Middleware to parse URL-encoded requests
+app.use(express.urlencoded({ extended: true }));
+
+// Install response compression middleware to reduce response size
+installResponseCompression(app);
+
+// Initialize Passport.js for authentication
+installPassport(app);
 
 // API call logger middleware
 app.use((req, _res, next) => {

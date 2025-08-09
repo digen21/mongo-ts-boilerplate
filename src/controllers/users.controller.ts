@@ -18,14 +18,17 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 export const getAllUsers = async (_req: Request, res: Response) => {
-  const users = await userService.findAll();
+  const users = await userService.find();
   return res.status(httpStatus.OK).send({ result: users });
 };
 
 export const getUserById = async (req: Request, res: Response) => {
   const user = await userService.findById(req.params.id);
   if (!user) {
-    throw new ServerError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ServerError({
+      message: 'User not found',
+      status: httpStatus.NOT_FOUND,
+    });
   }
 
   return res.status(httpStatus.OK).send({ result: user });
@@ -34,7 +37,10 @@ export const getUserById = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const user = await userService.findById(req.params.id);
   if (!user) {
-    throw new ServerError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ServerError({
+      message: 'User not found',
+      status: httpStatus.NOT_FOUND,
+    });
   }
 
   const updatedUser = await userService.update(req.params.id, req.body);

@@ -11,7 +11,7 @@ passport.use(
     {
       clientID: env.googleClientId!,
       clientSecret: env.googleClientSecret!,
-      callbackURL: env.callbackUrl
+      callbackURL: env.callbackUrl,
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
@@ -24,13 +24,13 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user: any, done) => {
+passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id: string, done) => {
   const commonService = new CommonService<IUser>(User);
-  const user = commonService.findById(id);
+  const user = await commonService.findById(id);
   done(null, user);
 });
 
