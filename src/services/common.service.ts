@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose';
+import { Model, Document, FilterQuery } from 'mongoose';
 
 export default class CommonService<T extends Document> {
   private model: Model<T>;
@@ -7,27 +7,26 @@ export default class CommonService<T extends Document> {
     this.model = model;
   }
 
-  async create(data: Partial<T>) {
+  async create(data: Partial<T>): Promise<T> {
     return await this.model.create(data);
   }
 
-  async findOne(filter: Partial<Record<keyof T, any>>) {
+  async findOne(filter: FilterQuery<T>): Promise<T | null> {
     return await this.model.findOne(filter);
   }
 
-  async findAll(filter: Partial<Record<keyof T, any>> = {}) {
-    return await this.model.find(filter);
+  async find(filter: FilterQuery<T> = {}): Promise<T[]> {
+    return this.model.find(filter).exec();
   }
-
-  async findById(id: string) {
+  async findById(id: string): Promise<T | null> {
     return await this.model.findById(id);
   }
 
-  async update(id: string, data: Partial<T>) {
+  async update(id: string, data: Partial<T>): Promise<T | null> {
     return await this.model.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<T | null> {
     return await this.model.findByIdAndDelete(id);
   }
 }

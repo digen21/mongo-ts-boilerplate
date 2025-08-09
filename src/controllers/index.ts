@@ -1,2 +1,6 @@
-export { googleAuthFailure, googleAuthSuccess} from './auth.controller';
+export {
+  getRefreshToken, googleAuthFailure,
+  googleAuthSuccess, login, profile, register
+} from './auth.controller';
 export * from './users.controller';
+

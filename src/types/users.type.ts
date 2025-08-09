@@ -1,6 +1,9 @@
 import { Document } from 'mongoose';
 
 export interface IUser extends Document {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
   firstName?: string;
   lastName?: string;
   username: string;
@@ -12,3 +15,9 @@ export interface IUser extends Document {
   imageUrl?: string;
   isEmailVerified?: boolean;
 }
+
+export type IUserRegister = Omit<
+  IUser,
+  'isEmailVerified' | 'lastLoginAt' | 'provider' | 'providerId'
+>;
+export type IUserLogin = Pick<IUser, 'username' | 'email' | 'password'>;

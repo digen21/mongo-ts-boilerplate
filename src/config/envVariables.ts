@@ -9,6 +9,7 @@ const envSchema = Joi.object({
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
   GOOGLE_CALLBACK_URL: Joi.string().required(),
   SESSION_SECRET: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
 }).unknown();
 
 const { error, value: envVars } = envSchema.validate(process.env);
@@ -27,6 +28,7 @@ const env = {
   callbackUrl: envVars.GOOGLE_CALLBACK_URL,
   isProduction: envVars.NODE_ENV === 'production',
   isDevelopment: envVars.NODE_ENV === 'development',
+  jwtSecret: envVars.JWT_SECRET,
 };
 
 export default env;

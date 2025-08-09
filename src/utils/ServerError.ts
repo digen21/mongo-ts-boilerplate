@@ -1,18 +1,22 @@
 import httpStatus from 'http-status';
 
-export default class ServerError extends Error {
-  statusCode: number;
+class ServerError extends Error {
+  public readonly statusCode: HttpStatus | number;
   isOperational: boolean;
 
-  constructor(
-    statusCode: number = httpStatus.INTERNAL_SERVER_ERROR,
-    message: string = '',
+  public constructor({
+    message,
+    status,
     isOperational = true,
     stack = '',
-  ) {
+  }: {
+    message: string;
+    status: HttpStatus | number;
+    isOperational?: boolean;
+    stack?: string;
+  }) {
     super(message);
-
-    this.statusCode = statusCode;
+    this.statusCode = status || httpStatus.INTERNAL_SERVER_ERROR;
     this.isOperational = isOperational;
     if (stack) {
       this.stack = stack;
@@ -21,3 +25,5 @@ export default class ServerError extends Error {
     }
   }
 }
+
+export default ServerError;
