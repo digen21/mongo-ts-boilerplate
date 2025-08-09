@@ -3,20 +3,21 @@ import httpStatus from 'http-status';
 import passport from 'passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 
+import { env } from '../../config';
 import { User } from '../../models';
 import { CommonService } from '../../services';
 import { IUser } from '../../types';
 import { ServerError } from '../../utils';
 
 interface JWTPayload {
-  userId: string;
+  id: string;
   iat: number;
   exp: number;
 }
 
 export default (app: Express) => {
   const options = {
-    secretOrKey: String(process.env.JWT_SECRET),
+    secretOrKey: String(env.jwtSecret),
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   };
 
@@ -24,7 +25,7 @@ export default (app: Express) => {
 
   passport.use(
     new Strategy(options, async (payload: JWTPayload, done: VerifiedCallback) => {
-      const user = await commonService.findOne({ _id: payload.userId });
+      const user = await commonService.findOne({ _id: payload.id });
 
       if (user && !user.isEmailVerified) {
         throw new ServerError({

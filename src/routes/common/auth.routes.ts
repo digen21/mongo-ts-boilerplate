@@ -8,8 +8,9 @@ import {
   login,
   profile,
   register,
+  verifyEmail,
 } from '../../controllers';
-import { validateInput } from '../../middlewares';
+import { authenticate, validateInput } from '../../middlewares';
 import { loginSchema, refreshTokenSchema, registerSchema } from '../../validators';
 
 const router = express.Router();
@@ -23,9 +24,11 @@ router.post('/login', validateInput(loginSchema), login);
 // Get Refresh token
 router.post('/refresh-token', validateInput(refreshTokenSchema), getRefreshToken);
 
+router.post('/verify-email', verifyEmail);
+
 // User profile
 // This route is protected by JWT authentication
-router.get('/profile', passport.authenticate('jwt', { session: false }), profile);
+router.get('/profile', authenticate, profile);
 
 // Google authentication routes
 

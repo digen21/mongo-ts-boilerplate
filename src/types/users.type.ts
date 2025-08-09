@@ -14,6 +14,8 @@ export interface IUser extends Document {
   lastLoginAt?: Date;
   imageUrl?: string;
   isEmailVerified?: boolean;
+  emailVerificationToken: string | null;
+  verificationTokenSentAt: Date | null;
 }
 
 export type IUserRegister = Omit<

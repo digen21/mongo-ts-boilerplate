@@ -24,6 +24,6 @@
       "@constants/*": ["src/constants/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/**/*.html"],
   "exclude": ["node_modules"]
 }

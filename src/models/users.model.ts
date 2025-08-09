@@ -55,6 +55,25 @@ const UserSchema = new Schema<IUser>(
      * Indicates whether the user's email is verified
      */
     isEmailVerified: { type: Boolean, default: false },
+
+    /**
+     * Email Verification token for the user
+     */
+    emailVerificationToken: {
+      type: String,
+      required: false,
+      default: null,
+    },
+
+    /**
+     * Email Verification token sent date and time for the user
+     * This field is optional and defaults to null
+     */
+    verificationTokenSentAt: {
+      type: Date,
+      required: false,
+      default: null,
+    },
   },
   {
     /**

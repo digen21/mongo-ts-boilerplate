@@ -10,6 +10,12 @@ const envSchema = Joi.object({
   GOOGLE_CALLBACK_URL: Joi.string().required(),
   SESSION_SECRET: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
+  SMTP_HOST: Joi.string().required(),
+  SMTP_PORT: Joi.number().default(587),
+  SMTP_USER: Joi.string().required(),
+  SMTP_PASS: Joi.string().required(),
+  SMTP_FROM_NAME: Joi.string(),
+  SMTP_FROM_EMAIL: Joi.string().email(),
 }).unknown();
 
 const { error, value: envVars } = envSchema.validate(process.env);
@@ -29,6 +35,12 @@ const env = {
   isProduction: envVars.NODE_ENV === 'production',
   isDevelopment: envVars.NODE_ENV === 'development',
   jwtSecret: envVars.JWT_SECRET,
+  smtpHost: envVars.SMTP_HOST,
+  smtpPort: envVars.SMTP_PORT,
+  smtpUser: envVars.SMTP_USER,
+  smtpPass: envVars.SMTP_PASS,
+  smtpFromName: envVars.SMTP_FROM_NAME || 'Trackify',
+  smtpFromEmail: envVars.SMTP_FROM_EMAIL || 'no-reply@trackify',
 };
 
 export default env;

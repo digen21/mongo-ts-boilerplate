@@ -4,15 +4,17 @@ import httpStatus from 'http-status';
 import passport from 'passport';
 
 import { connectDB, env } from './config';
-import {
-  installPassport,
-  installResponseCompression,
-  logger,
-} from './middlewares';
+import { installPassport, installResponseCompression, logger } from './middlewares';
 import router from './routes';
 
 // Create an Express application
 const app = express();
+
+// API call logger middleware
+app.use((req, _res, next) => {
+  logger.info(`${req.method} ${req.originalUrl} - ${req.ip}`);
+  next();
+});
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -25,12 +27,6 @@ installResponseCompression(app);
 
 // Initialize Passport.js for authentication
 installPassport(app);
-
-// API call logger middleware
-app.use((req, _res, next) => {
-  logger.info(`${req.method} ${req.originalUrl} - ${req.ip}`);
-  next();
-});
 
 // mongodb database connection
 connectDB();
@@ -64,5 +60,5 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
 });
 
 app.listen(env.port, () => {
-  console.log(`Server is running on port ${env.port}`);
+  logger.info(`Server is running on port ${env.port}`);
 });
